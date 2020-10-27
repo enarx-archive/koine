@@ -1,22 +1,25 @@
 // SPDX-License-Identifier: Apache-2.0
 
-use serde_derive::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use tokio::sync::Mutex;
 use uuid::Uuid;
 
-pub const LOCAL_LISTEN_ADDRESS: &str = "192.168.1.202";
+pub const LOCAL_LISTEN_ADDRESS: &str = "0.0.0.0";
 
 pub const PROTO_VERSION: f32 = 0.1;
 pub const PROTO_NAME: &str = "Enarx-Keep-Manager";
 pub const BIND_PORT: u16 = 3030;
 
-pub const KEEP_LOADER_STATE_UNDEF: u8 = 0;
-pub const KEEP_LOADER_STATE_LISTENING: u8 = 1;
-pub const KEEP_LOADER_STATE_STARTED: u8 = 2;
-pub const KEEP_LOADER_STATE_COMPLETE: u8 = 3;
-pub const KEEP_LOADER_STATE_ERROR: u8 = 15;
-
+pub enum LoaderState {
+    Indeterminate,
+    Ready,
+    Running,
+    Shutdown,
+    Error,
+}
+//these are initial values used in existing an PoC implementation,
+// many are expected to be changed
 pub const KEEP_INFO_COMMAND: &str = "keep-info";
 pub const CONTRACT_COMMAND: &str = "command";
 pub const KEEP_COMMAND: &str = "command";
@@ -27,11 +30,13 @@ pub const KEEP_KUUID: &str = "kuuid";
 pub const KEEP_ARCH: &str = "keep-arch";
 pub const WASMLDR_BIND_PORT_CMD: &str = "wasmldr-bind-port";
 pub const WASMLDR_ADDR_CMD: &str = "wasmldr-addr";
-pub const KEEP_ARCH_NIL: &str = "nil";
-pub const KEEP_ARCH_SEV: &str = "sev";
-pub const KEEP_ARCH_SGX: &str = "sgx";
-pub const KEEP_ARCH_KVM: &str = "kvm";
 
+pub enum Backend {
+    Nil,
+    Sev,
+    Sgx,
+    Kvm,
+}
 pub type KeepList = Arc<Mutex<Vec<Keep>>>;
 
 #[derive(Serialize, Deserialize, Clone)]
