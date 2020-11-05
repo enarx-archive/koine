@@ -5,6 +5,8 @@ use std::sync::Arc;
 use tokio::sync::Mutex;
 use uuid::Uuid;
 
+pub mod attestation;
+
 pub const LOCAL_LISTEN_ADDRESS: &str = "0.0.0.0";
 
 pub const PROTO_VERSION: f32 = 0.1;
