@@ -93,17 +93,18 @@ pub enum Message {
 
 #[cfg(test)]
 mod tests {
-    use serde_cbor as serde_flavor;
+    use ciborium::de::from_reader;
+    use ciborium::ser::into_writer;
 
     use super::*;
 
     fn test_message_representation(bytes: &[u8], expected: Message) {
-        let actual: Message = serde_flavor::from_reader(bytes).unwrap();
+        let actual: Message = from_reader(bytes).unwrap();
         assert_eq!(actual, expected);
 
         let mut out = vec![];
-        serde_flavor::to_writer(&mut out, &actual).unwrap();
-        let actual: Message = serde_flavor::from_reader(&out[..]).unwrap();
+        into_writer(&actual, &mut out).unwrap();
+        let actual: Message = from_reader(&out[..]).unwrap();
         assert_eq!(actual, expected);
     }
 
