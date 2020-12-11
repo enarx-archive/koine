@@ -8,7 +8,7 @@ license = "Apache-2.0"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-ciborium = { git = "https://github.com/enarx/ciborium", rev ="bcaec75", features = ["serde", "std"] }
 serde = { version = "1.0", features = ["derive"] }
 tokio = { version = "0.2", features = ["macros", "sync"] }
 uuid = { version = "0.8", features = ["serde", "v4"] }
+ciborium = "0.1"
