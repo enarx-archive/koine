@@ -5,8 +5,6 @@ use serde::{Deserialize, Serialize};
 use std::error::Error;
 use std::fmt;
 //use std::net::IpAddr;
-use std::sync::Arc;
-use tokio::sync::Mutex;
 use uuid::Uuid;
 pub mod attestation;
 pub const LOCAL_LISTEN_ADDRESS: &str = "0.0.0.0";
@@ -53,9 +51,6 @@ impl Backend {
         }
     }
 }
-
-pub type KeepList = Arc<Mutex<Vec<Keep>>>;
-pub type ContractList = Arc<Mutex<Vec<KeepContract>>>;
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct KeepMgr {
@@ -156,23 +151,26 @@ impl Error for LocalCborErr {
 
 impl warp::reject::Reject for LocalCborErr {}
 
+/*
 //--------------MIME work below
 
 pub const MIME_TYPE_SUFFIX: &str = "application/vnd.enarx.att.sev+cbor; msg=";
 
+//TODO - remove?
 #[derive(Serialize, Deserialize, Clone)]
 pub struct MIMEMessage<T: MIMEPayload> {
     pub mimetype: String,
     pub payload: T,
 }
 
+//TODO - remove?
 pub trait MIMEPayload {
     //NOTE -  all struct implementing this trait
     // also need to derive cbor::Deserialize
     // and cbor::Serialize
     fn mime_type(&self) -> &'static str;
 }
-
+*/
 #[cfg(test)]
 mod tests {
     #[test]
