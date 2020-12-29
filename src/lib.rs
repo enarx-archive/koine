@@ -2,11 +2,13 @@
 
 use http::response::*;
 use serde::{Deserialize, Serialize};
+use std::path::PathBuf;
 use std::error::Error;
 use std::fmt;
 //use std::net::IpAddr;
 use uuid::Uuid;
 pub mod attestation;
+pub mod threading;
 pub const LOCAL_LISTEN_ADDRESS: &str = "0.0.0.0";
 
 pub const PROTO_VERSION: f32 = 0.2;
@@ -64,6 +66,7 @@ pub struct KeepContract {
     pub keepmgr: KeepMgr,
     pub backend: Backend,
     pub uuid: Uuid,
+    pub socket_path: PathBuf,
     //TODO - add duration of contract availability
     //TODO - add further information
 }
@@ -84,6 +87,7 @@ pub struct Wasmldr {
 pub struct Keep {
     pub backend: Backend,
     pub kuuid: Uuid,
+    pub socket_path: PathBuf,
     pub state: LoaderState,
     pub wasmldr: Option<Wasmldr>,
     pub human_readable_info: Option<String>,
