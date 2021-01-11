@@ -2,9 +2,9 @@
 
 use http::response::*;
 use serde::{Deserialize, Serialize};
-use std::path::PathBuf;
 use std::error::Error;
 use std::fmt;
+use std::path::PathBuf;
 use std::os::unix::net::UnixStream;
 use uuid::Uuid;
 pub mod attestation;
