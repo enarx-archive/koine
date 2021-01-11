@@ -2,10 +2,11 @@
 
 use http::response::*;
 use serde::{Deserialize, Serialize};
-use std::path::PathBuf;
 use std::error::Error;
 use std::fmt;
+use std::path::PathBuf;
 //use std::net::IpAddr;
+use std::os::unix::net::UnixStream;
 use uuid::Uuid;
 pub mod attestation;
 pub mod threading;
@@ -81,6 +82,14 @@ pub struct Payload {
 pub struct Wasmldr {
     pub wasmldr_ipaddr: String,
     pub wasmldr_port: u16,
+}
+
+#[derive(Debug)]
+pub struct KeepLdrConnection {
+    pub kuuid: Uuid,
+    pub keepldrstream: Option<UnixStream>,
+    //TODO - allow time information for time-outs
+    //pub established_time: ?
 }
 
 #[derive(Serialize, Deserialize, Clone)]
