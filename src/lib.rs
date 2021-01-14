@@ -100,6 +100,7 @@ pub struct Keep {
     pub state: LoaderState,
     pub wasmldr: Option<Wasmldr>,
     pub human_readable_info: Option<String>,
+    pub certificate_as_pem: Option<Vec<u8>>,
 }
 
 #[derive(Serialize, Deserialize, Clone)]

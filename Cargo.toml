@@ -18,4 +18,4 @@ strum = { version = "0.19", features = ["derive"] }
 hyper = "0.13"
 warp = { version = "0.2", features = ["tls"] }
 http = "0.2"
-
+openssl = "0.10.32"
