@@ -41,3 +41,11 @@ confidence-threshold = 0.8
 # If true, ignores workspace crates that aren't published, or are only
 # published to private registries
 ignore = false
+
+[[licenses.clarify]]
+name = "ring"
+version = "*"
+expression = "MIT AND ISC AND OpenSSL"
+license-files = [
+    { path = "LICENSE", hash = 0xbd0eed23 }
+]
