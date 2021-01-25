@@ -10,6 +10,6 @@ license = "Apache-2.0"
 [dependencies]
 sev = { git  = "https://github.com/enarx/sev" }
 serde = { version = "1.0", features = ["derive"] }
-tokio = { version = "0.2", features = ["macros", "sync"] }
+tokio = { version = "1.1", features = ["macros", "sync"] }
 uuid = { version = "0.8", features = ["serde", "v4"] }
 ciborium = "0.1"
