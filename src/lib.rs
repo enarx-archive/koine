@@ -2,13 +2,13 @@
 
 use http::response::*;
 use serde::{Deserialize, Serialize};
+use std::path::PathBuf;
 use std::error::Error;
 use std::fmt;
-//use std::net::IpAddr;
-use std::sync::Arc;
-use tokio::sync::Mutex;
+use std::os::unix::net::UnixStream;
 use uuid::Uuid;
 pub mod attestation;
+pub mod threading;
 pub const LOCAL_LISTEN_ADDRESS: &str = "0.0.0.0";
 
 pub const PROTO_VERSION: f32 = 0.2;
@@ -54,9 +54,6 @@ impl Backend {
     }
 }
 
-pub type KeepList = Arc<Mutex<Vec<Keep>>>;
-pub type ContractList = Arc<Mutex<Vec<KeepContract>>>;
-
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct KeepMgr {
     //pub ipaddr: IpAddr,
@@ -69,29 +66,34 @@ pub struct KeepContract {
     pub keepmgr: KeepMgr,
     pub backend: Backend,
     pub uuid: Uuid,
+    pub socket_path: PathBuf,
     //TODO - add duration of contract availability
     //TODO - add further information
 }
-/*
-#[derive(Serialize, Deserialize, Clone)]
-pub struct Payload {
-    pub encoding: String,
-    pub contents: Vec<u8>,
-}
-*/
+
 #[derive(Serialize, Deserialize, Clone)]
 pub struct Wasmldr {
     pub wasmldr_ipaddr: String,
     pub wasmldr_port: u16,
 }
 
+#[derive(Debug)]
+pub struct KeepLdrConnection {
+    pub kuuid: Uuid,
+    pub keepldrstream: Option<UnixStream>,
+    //TODO - allow time information for time-outs
+    //pub established_time: ?
+}
+
 #[derive(Serialize, Deserialize, Clone)]
 pub struct Keep {
     pub backend: Backend,
     pub kuuid: Uuid,
+    pub socket_path: PathBuf,
     pub state: LoaderState,
     pub wasmldr: Option<Wasmldr>,
     pub human_readable_info: Option<String>,
+    pub certificate_as_pem: Option<Vec<u8>>,
 }
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -133,15 +135,7 @@ impl warp::reply::Reply for CborReply {
 struct LocalCborErr {
     details: String,
 }
-/*
-impl LocalCborErr {
-    fn new(msg: &str) -> LocalCborErr {
-        LocalCborErr {
-            details: msg.to_string(),
-        }
-    }
-}
-*/
+
 impl fmt::Display for LocalCborErr {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.details)
@@ -155,23 +149,6 @@ impl Error for LocalCborErr {
 }
 
 impl warp::reject::Reject for LocalCborErr {}
-
-//--------------MIME work below
-
-pub const MIME_TYPE_SUFFIX: &str = "application/vnd.enarx.att.sev+cbor; msg=";
-
-#[derive(Serialize, Deserialize, Clone)]
-pub struct MIMEMessage<T: MIMEPayload> {
-    pub mimetype: String,
-    pub payload: T,
-}
-
-pub trait MIMEPayload {
-    //NOTE -  all struct implementing this trait
-    // also need to derive cbor::Deserialize
-    // and cbor::Serialize
-    fn mime_type(&self) -> &'static str;
-}
 
 #[cfg(test)]
 mod tests {
