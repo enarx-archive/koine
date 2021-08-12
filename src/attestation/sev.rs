@@ -30,15 +30,20 @@ pub struct Measurement {
 #[derive(Debug, Eq, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "kebab-case")]
 pub enum Message {
-    /// The Naples certificate chain carries the SEV platform
-    /// certificate chain, but the AMD ARK and ASK are "small"
+    /// The Naples certificate chain carries an SEV platform
+    /// certificate chain, with the AMD ARK and ASK as "small"
     /// CA certificates (using 256 byte components).
     CertificateChainNaples(Chain),
 
-    /// The Rome certificate chain also carries the SEV platform
-    /// certificate chain, but the AMD ARK and ASK are "large"
+    /// The Rome certificate chain carries an SEV platform
+    /// certificate chain, with the AMD ARK and ASK as "large"
     /// CA certificates (using 512 byte components).
     CertificateChainRome(Chain),
+
+    /// The Milan certificate chain carries an SEV platform
+    /// certificate chain, with the AMD ARK and ASK as "large"
+    /// CA certificates (using 512 byte components).
+    CertificateChainMilan(Chain),
 
     /// The launch start buffer establishes a secure channel with
     /// the remote SEV platform and furnishes with information
